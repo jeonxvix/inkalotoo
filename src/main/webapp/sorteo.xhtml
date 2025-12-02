@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="es"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+
+<h:head>
+    <title>INKALOTO - Sorteo en línea</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link href="#{request.contextPath}/css/style.css" rel="stylesheet" type="text/css"/>
+</h:head>
+
+<h:body>
+
+<!-- ================== BARRA SUPERIOR (IGUAL A CARGARSALDO) ================== -->
+<header class="topbar">
+    <div class="container nav-slim">
+
+        <!-- Logo / inicio -->
+        <a href="#{request.contextPath}/index.xhtml" class="brand">INKALOTO</a>
+
+        <div class="nav-slim-right">
+
+            <!-- 🔔 ahora puedes usar el total de no leídas en ESTA página -->
+            <a href="#{request.contextPath}/notificaciones.xhtml"
+                class="notif-icon"
+                title="Notificaciones">
+                 🔔
+                 <span id="notifCount" class="notif-badge">
+                     #{notificacionesBean.cantidadNoLeidas}
+                 </span>
+             </a>
+
+            <!-- Cargar saldo -->
+            <a href="#{request.contextPath}/cargarsaldo.xhtml" class="btn btn-dark pill">+ Cargar saldo</a>
+
+            <!-- Saldo (MISMA LÍNEA QUE EN CARGARSALDO) -->
+            <span class="balance-mini">
+                S/
+                <strong>#{miCuentaBean.billetera.saldoActual}</strong>
+            </span>
+
+            <!-- Menú de usuario -->
+            <div class="select user-select">
+                <select id="userMenu" onchange="cambiarPagina(this)">
+                    <option value="">
+                        #{loginBean.usuarioLogueado != null ? loginBean.usuarioLogueado.nombres : 'Usuario'}
+                    </option>
+                    <option value="#{request.contextPath}/micuenta.xhtml">Mi cuenta</option>
+                    <option value="#{request.contextPath}/historialtransacciones.xhtml">Movimientos</option>
+                    <option value="#{request.contextPath}/historialjugada.xhtml">Historial de jugadas</option>
+                    <option value="#{request.contextPath}/historialpremios.xhtml">Premios</option>
+                    <option value="#{request.contextPath}/notificaciones.xhtml">Notificaciones</option>
+                    <option value="#{request.contextPath}/retiro.xhtml">Retirar premios</option>
+                </select>
+            </div>
+                                    <!-- Cerrar sesión -->
+                                    <h:form style="display:inline;">
+                    <h:commandButton value="Cerrar sesión"
+                                     action="#{loginBean.logout}"
+                                     styleClass="btn-logout" />
+                </h:form>
+        </div>
+    </div>
+</header>
+
+<script type="text/javascript">
+    function cambiarPagina(select) {
+        if (select.value) {
+            window.location.href = select.value;
+        }
+    }
+</script>
+
+<!-- ================== CONTENIDO PRINCIPAL ================== -->
+<main class="panel">
+    <div class="panel-inner">
+
+        <h1>Sorteo <span class="accent">en línea</span></h1>
+        <p class="hint">
+            Selecciona tus números o genera boletos automáticos y participa en el próximo sorteo.
+        </p>
+
+        <!-- Mensajes del bean -->
+        <h:panelGroup rendered="#{not empty sorteoBean.mensajeError}">
+            <div class="alert alert-error">
+                #{sorteoBean.mensajeError}
+            </div>
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{not empty sorteoBean.mensajeExito}">
+            <div class="alert alert-success">
+                #{sorteoBean.mensajeExito}
+            </div>
+        </h:panelGroup>
+
+        <!-- FORMULARIO DE SORTEO -->
+        <h:form id="formSorteo" styleClass="form">
+
+            <!-- RF04 - Compra de boletos -->
+            <div class="grid g-2">
+
+                <div class="field">
+                    <label>Tipo de sorteo</label>
+                    <div class="select">
+                        <select id="tipoSorteo" name="tipoSorteo">
+                            <option value="diario">Sorteo Diario</option>
+                            <option value="semanal">Sorteo Semanal</option>
+                            <option value="acumulado">Súper Acumulado</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label>Fecha</label>
+                    <h:inputText id="fechaSorteo"
+                                 value="#{sorteoBean.fechaSorteo}"
+                                 p:type="date"/>
+                </div>
+
+
+            </div>
+
+            <!-- RF04/05 - Números elegidos -->
+            <div class="field">
+                <label>Tus números (6 números del 1 al 45)</label>
+
+                <div class="nums-grid" id="numerosGrid">
+                    <!-- ligados al SorteoBean: n1..n6 -->
+                    <h:inputText value="#{sorteoBean.n1}"
+                                 p:type="number" p:min="1" p:max="45" p:placeholder="N°1"/>
+                    <h:inputText value="#{sorteoBean.n2}"
+                                 p:type="number" p:min="1" p:max="45" p:placeholder="N°2"/>
+                    <h:inputText value="#{sorteoBean.n3}"
+                                 p:type="number" p:min="1" p:max="45" p:placeholder="N°3"/>
+                    <h:inputText value="#{sorteoBean.n4}"
+                                 p:type="number" p:min="1" p:max="45" p:placeholder="N°4"/>
+                    <h:inputText value="#{sorteoBean.n5}"
+                                 p:type="number" p:min="1" p:max="45" p:placeholder="N°5"/>
+                    <h:inputText value="#{sorteoBean.n6}"
+                                 p:type="number" p:min="1" p:max="45" p:placeholder="N°6"/>
+                </div>
+
+                <div class="actions-row">
+                    <button type="button" class="btn btn-dark" id="auto">
+                        Generar automáticos
+                    </button>
+                </div>
+            </div>
+
+            <!-- RF04 - Compra -->
+            <div class="grid g-2">
+
+                <div class="field">
+                    <label>Precio por boleto</label>
+                    <div class="select">
+                        <!-- Ligado al bean: sorteoBean.precio -->
+                        <h:selectOneMenu id="precio" value="#{sorteoBean.precio}">
+                            <f:selectItem itemValue="1.00" itemLabel="S/ 1.00"/>
+                            <f:selectItem itemValue="2.00" itemLabel="S/ 2.00"/>
+                        </h:selectOneMenu>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label>Cantidad</label>
+                    <input type="number" id="cantidad" min="1" value="1"/>
+                </div>
+
+            </div>
+
+            <p class="hint">
+                Total: S/
+                <strong id="totalCompra">2.00</strong>
+            </p>
+
+            <!-- Mostrar la jugada actual -->
+            <h:panelGroup rendered="#{not empty sorteoBean.numerosJugadaActual}">
+                <p class="hint">
+                    Tu jugada:
+                    <strong>#{sorteoBean.numerosJugadaActual}</strong>
+                </p>
+            </h:panelGroup>
+
+            <div class="actions-row">
+                <!-- Comprar boleto → descuenta saldo y registra jugada -->
+                <h:commandButton value="Comprar boleto"
+                                 action="#{sorteoBean.participarEnSorteo}"
+                                 styleClass="btn-gold-lg"
+                                 id="btnComprar"/>
+            </div>
+
+            <!-- RF05 - Boletos digitales (solo visual JS) -->
+            <section class="tickets" id="boletos">
+                <h2 class="accent">Boletos digitales generados</h2>
+                <div id="listaBoletos" class="tickets-list"></div>
+            </section>
+
+            <!-- RF07/08 - Sorteo automático y resultados -->
+            <section class="results">
+                <h2 class="accent">Resultados del último sorteo</h2>
+
+                <div id="resultados" class="resultados">
+                    <h:panelGroup rendered="#{empty sorteoBean.numerosGanadores}">
+                        <p>Aún no se ha ejecutado ningún sorteo.</p>
+                    </h:panelGroup>
+
+                    <h:panelGroup rendered="#{not empty sorteoBean.numerosGanadores}">
+                        <p>Números ganadores:
+                            <strong>#{sorteoBean.numerosGanadores}</strong>
+                        </p>
+                    </h:panelGroup>
+                </div>
+
+                <div class="actions-row">
+                    <h:commandButton value="Ejecutar sorteo"
+                                     action="#{sorteoBean.ejecutarSorteo}"
+                                     styleClass="btn btn-dark"
+                                     id="btnEjecutar"
+                                     disabled="#{not empty sorteoBean.numerosGanadores}"/>
+                </div>
+
+            </section>
+
+            <!-- RF09 - Notificación -->
+            <div class="bingo-status" id="notificacion"></div>
+
+        </h:form>
+
+    </div>
+</main>
+
+<footer class="footer">
+    © 2025 INKALOTO — Sorteo en línea.
+</footer>
+
+<!-- TU JS ORIGINAL -->
+<script src="jsp/sorteo.js" type="text/javascript"></script>
+</h:body>
+</html>

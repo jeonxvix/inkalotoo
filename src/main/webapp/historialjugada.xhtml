@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+    <title>INKALOTO - Historial de Jugadas</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link href="#{request.contextPath}/css/style.css" rel="stylesheet" type="text/css"/>
+</h:head>
+
+<h:body>
+
+    <!-- HEADER IGUAL A CARGARSALDO.XHTML -->
+    <header class="topbar">
+        <div class="container nav-slim">
+            <!-- Logo / inicio -->
+            <a href="#{request.contextPath}/index.xhtml" class="brand">INKALOTO</a>
+
+            <div class="nav-slim-right">
+            <!-- 🔔 ahora puedes usar el total de no leídas en ESTA página -->
+            <a href="#{request.contextPath}/notificaciones.xhtml"
+                class="notif-icon"
+                title="Notificaciones">
+                 🔔
+                 <span id="notifCount" class="notif-badge">
+                     #{notificacionesBean.cantidadNoLeidas}
+                 </span>
+             </a>
+
+                <!-- Cargar saldo -->
+                <a href="#{request.contextPath}/cargarsaldo.xhtml" class="btn btn-dark pill">+ Cargar saldo</a>
+
+                <!-- Saldo -->
+                <span class="balance-mini">
+                    S/
+                    <strong>
+                        <h:outputText value="#{miCuentaBean.billetera.saldoActual}">
+                            <f:convertNumber minFractionDigits="2" maxFractionDigits="2"/>
+                        </h:outputText>
+                    </strong>
+                </span>
+
+                <!-- Menú de usuario -->
+                <div class="select user-select">
+                    <select id="userMenu" onchange="cambiarPagina(this)">
+                        <option value="">
+                            #{loginBean.usuarioLogueado != null ? loginBean.usuarioLogueado.nombres : 'Usuario'}
+                        </option>
+                    <option value="#{request.contextPath}/micuenta.xhtml">Mi cuenta</option>
+                    <option value="#{request.contextPath}/historialtransacciones.xhtml">Movimientos</option>
+                    <option value="#{request.contextPath}/historialjugada.xhtml">Historial de jugadas</option>
+                    <option value="#{request.contextPath}/historialpremios.xhtml">Premios</option>
+                    <option value="#{request.contextPath}/notificaciones.xhtml">Notificaciones</option>
+                    <option value="#{request.contextPath}/retiro.xhtml">Retirar premios</option>
+                    </select>
+                </div>
+                                    <!-- Cerrar sesión -->
+                                    <h:form style="display:inline;">
+                    <h:commandButton value="Cerrar sesión"
+                                     action="#{loginBean.logout}"
+                                     styleClass="btn-logout" />
+                </h:form>
+            </div>
+        </div>
+    </header>
+
+    <script type="text/javascript">
+        function cambiarPagina(select) {
+            if (select.value) {
+                window.location.href = select.value;
+            }
+        }
+    </script>
+
+    <!-- CONTENIDO -->
+    <main class="panel">
+        <div class="panel-inner">
+
+            <h1>Historial de <span class="accent">jugadas</span></h1>
+            <p class="hint">Aquí puedes ver todas tus apuestas realizadas en INKALOTO.</p>
+
+            <h:form>
+
+                <!-- Tabla de jugadas -->
+                <h:dataTable value="#{historialJugadaBean.jugadas}"
+                             var="j"
+                             styleClass="table"
+                             rowClasses="table-row">
+
+                    <!-- Fecha -->
+                    <h:column>
+                        <f:facet name="header">Fecha</f:facet>
+                        <h:outputText value="#{j.fechaJugada}">
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
+                        </h:outputText>
+                    </h:column>
+
+                    <!-- Juego (BINGO / SORTEO) -->
+                    <h:column>
+                        <f:facet name="header">Juego</f:facet>
+                        <h:outputText
+                                value="#{j.idJuego == 1 ? 'BINGO' : (j.idJuego == 2 ? 'SORTEO' : 'OTRO')}"/>
+                    </h:column>
+
+                    <!-- Código -->
+                    <h:column>
+                        <f:facet name="header">Código</f:facet>
+                        #{j.codigoJugada}
+                    </h:column>
+
+                    <!-- NUEVO: Detalle / Números -->
+                    <h:column>
+                        <f:facet name="header">Detalle / Números</f:facet>
+                        <h:outputText value="#{j.detalleJugada}"/>
+                    </h:column>
+
+                    <!-- Monto Apostado -->
+                    <h:column>
+                        <f:facet name="header">Monto Apostado</f:facet>
+                        S/
+                        <h:outputText value="#{j.montoApostado}">
+                            <f:convertNumber minFractionDigits="2"/>
+                        </h:outputText>
+                    </h:column>
+
+                    <!-- Ganó -->
+                    <h:column>
+                        <f:facet name="header">Ganó</f:facet>
+                        <h:outputText value="#{j.gano ? 'Sí' : 'No'}"/>
+                    </h:column>
+
+                    <!-- Monto Ganado -->
+                    <h:column>
+                        <f:facet name="header">Monto Ganado</f:facet>
+                        S/
+                        <h:outputText value="#{j.montoGanado}">
+                            <f:convertNumber minFractionDigits="2"/>
+                        </h:outputText>
+                    </h:column>
+
+                </h:dataTable>
+
+                <!-- Mensaje si no hay jugadas -->
+                <h:panelGroup rendered="#{empty historialJugadaBean.jugadas}">
+                    <div style="text-align: center; padding: 40px; color: #666;">
+                        <h3>Aún no tienes jugadas registradas</h3>
+                        <p>Las jugadas que realices aparecerán aquí.</p>
+                        <a href="#{request.contextPath}/bingo.xhtml" class="btn btn-gold" style="margin-top: 15px;">
+                            ¡Juega Bingo ahora!
+                        </a>
+                    </div>
+                </h:panelGroup>
+
+            </h:form>
+
+        </div>
+    </main>
+
+    <footer class="footer">
+        © 2025 INKALOTO — Historial de jugadas.
+    </footer>
+
+</h:body>
+</html>

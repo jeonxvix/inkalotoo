@@ -1,0 +1,100 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.inkaloto</groupId>
+    <artifactId>inkaloto</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+
+        <jakarta.faces.version>4.0.1</jakarta.faces.version>
+        <bootsfaces.version>2.0.0</bootsfaces.version> 
+        <jakarta.jaxrs.version>3.1.0</jakarta.jaxrs.version>
+
+        <jakarta.persistence.version>3.1.0</jakarta.persistence.version>
+        <mysql.version>8.0.33</mysql.version>
+    </properties>
+
+    <dependencies>
+
+        <!-- ========= JSF (Jakarta Faces 4.0) ========= -->
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>jakarta.faces</artifactId>
+            <version>3.0.5</version>
+            <type>jar</type>
+        </dependency>
+
+        <!-- ========= BootFaces (compatible con Jakarta) ========= -->
+        <dependency>
+            <groupId>net.bootsfaces</groupId>
+            <artifactId>bootsfaces</artifactId>
+            <version>${bootsfaces.version}</version>
+        </dependency>
+
+        <!-- ========= JAX-RS (REST Jakarta) ========= -->
+        <dependency>
+            <groupId>jakarta.ws.rs</groupId>
+            <artifactId>jakarta.ws.rs-api</artifactId>
+            <version>${jakarta.jaxrs.version}</version>
+        </dependency>
+
+        <!-- ========= Jakarta Servlet API ========= -->
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <version>6.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- ========= Jakarta Persistence (JPA 3.1) ========= -->
+        <dependency>
+            <groupId>jakarta.persistence</groupId>
+            <artifactId>jakarta.persistence-api</artifactId>
+            <version>${jakarta.persistence.version}</version>
+        </dependency>
+
+        <!-- ========= MySQL JDBC ========= -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.enterprise</groupId>
+            <artifactId>jakarta.enterprise.cdi-api</artifactId>
+            <version>5.0.0.Alpha1</version>
+            <type>jar</type>
+        </dependency>
+        
+
+    
+    <dependency>
+    <groupId>org.eclipse.persistence</groupId>
+    <artifactId>eclipselink</artifactId>
+    <version>4.0.2</version>
+</dependency>
+
+<dependency>
+        <groupId>org.json</groupId>
+        <artifactId>json</artifactId>
+        <version>20231013</version>
+    </dependency>
+        <dependency>
+            <groupId>jakarta.transaction</groupId>
+            <artifactId>jakarta.transaction-api</artifactId>
+            <version>2.0.1</version>
+            <type>jar</type>
+        </dependency>
+        
+
+    </dependencies>
+
+</project>

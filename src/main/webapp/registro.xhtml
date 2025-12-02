@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html lang="es"
+        xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>INKALOTO - Registro</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="css/style.css" rel="stylesheet" type="text/css" />
+</h:head>
+
+<h:body>
+
+    <!-- Header -->
+    <header class="topbar">
+        <div class="container">
+            <div class="brand">INKALOTO</div>
+            <nav class="actions">
+                <a class="btn btn-dark" href="login.xhtml">Iniciar sesión</a>
+                <a class="btn btn-gold" href="registro.xhtml">Regístrate</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main -->
+    <main class="split">
+        <!-- Lado imagen -->
+        <section class="hero" role="img" aria-label="Máquinas tragamonedas y ambiente de casino">
+            <img src="imagenes/toma15-768x1024.jpg" alt="" />
+        </section>
+
+        <!-- Lado formulario -->
+        <section class="panel">
+            <div class="panel-inner">
+                <h1>
+                    ¡Regístrate y obtén un bono de <span class="accent">S/30</span> con tu primera recarga!
+                </h1>
+
+                <h:form styleClass="form" id="formRegistro">
+
+                    <!-- Mensajes -->
+                    <div class="field">
+                        <h:messages styleClass="msg-error" layout="list" />
+                        <h:panelGroup rendered="#{not empty registroBean.mensajeError}">
+                            <p class="msg-error">#{registroBean.mensajeError}</p>
+                        </h:panelGroup>
+                        <h:panelGroup rendered="#{not empty registroBean.mensajeExito}">
+                            <p class="msg-ok">#{registroBean.mensajeExito}</p>
+                        </h:panelGroup>
+                    </div>
+
+                    <div class="grid g-2">
+                        <div class="field">
+                            <label for="nombres">Nombres</label>
+                            <h:inputText id="nombres" value="#{registroBean.nombres}"
+                                         required="true"
+                                         requiredMessage="Los nombres son obligatorios."
+                                         maxlength="100"
+                                         placeholder="Nombres" />
+                        </div>
+
+                        <div class="field">
+                            <label for="apellidos">Apellidos</label>
+                            <h:inputText id="apellidos" value="#{registroBean.apellidos}"
+                                         required="true"
+                                         requiredMessage="Los apellidos son obligatorios."
+                                         maxlength="100"
+                                         placeholder="Apellidos" />
+                        </div>
+                    </div>
+
+                    <div class="grid g-2">
+                        <div class="field">
+                            <label for="tipoDoc">Tipo de documento</label>
+                            <div class="select">
+                                <h:selectOneMenu id="tipoDoc"
+                                                 value="#{registroBean.tipoDocumento}"
+                                                 required="true"
+                                                 requiredMessage="Seleccione un tipo de documento.">
+                                    <f:selectItem itemLabel="Selecciona" itemValue="" noSelectionOption="true" />
+                                    <f:selectItem itemLabel="DNI" itemValue="DNI" />
+                                    <f:selectItem itemLabel="CE" itemValue="CE" />
+                                    <f:selectItem itemLabel="Pasaporte" itemValue="PASAPORTE" />
+                                </h:selectOneMenu>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label for="numDoc">N° de documento</label>
+                            <h:inputText id="numDoc"
+                                         value="#{registroBean.numeroDocumento}"
+                                         required="true"
+                                         requiredMessage="El número de documento es obligatorio."
+                                         maxlength="20"
+                                         placeholder="N° de documento" />
+                        </div>
+                    </div>
+
+                    <div class="grid g-2">
+                        <div class="field">
+                            <label for="fnac">Fecha de nacimiento</label>
+                            <h:inputText id="fnac"
+                                         value="#{registroBean.fechaNacimiento}"
+                                         required="true"
+                                         requiredMessage="La fecha de nacimiento es obligatoria."
+                                         placeholder="AAAA-MM-DD" />
+                            <small class="hint">Debes ser mayor de 18 años.</small>
+                        </div>
+
+                        <div class="field">
+                            <label for="genero">Género</label>
+                            <div class="select">
+                                <h:selectOneMenu id="genero"
+                                                 value="#{registroBean.genero}"
+                                                 required="true"
+                                                 requiredMessage="Seleccione un género.">
+                                    <f:selectItem itemLabel="Selecciona" itemValue="" noSelectionOption="true" />
+                                    <f:selectItem itemLabel="Femenino" itemValue="FEMENINO" />
+                                    <f:selectItem itemLabel="Masculino" itemValue="MASCULINO" />
+                                    <f:selectItem itemLabel="Prefiero no decirlo" itemValue="NO_ESPECIFICA" />
+                                </h:selectOneMenu>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid g-2">
+                        <div class="field">
+                            <label for="correo">Correo</label>
+                            <h:inputText id="correo"
+                                         value="#{registroBean.correo}"
+                                         required="true"
+                                         requiredMessage="El correo es obligatorio."
+                                         maxlength="120"
+                                         placeholder="ejemplo@correo.com" />
+                        </div>
+
+                        <div class="field">
+                            <label for="celular">Celular</label>
+                            <h:inputText id="celular"
+                                         value="#{registroBean.celular}"
+                                         required="true"
+                                         requiredMessage="El celular es obligatorio."
+                                         maxlength="15"
+                                         placeholder="9XXXXXXXX" />
+                        </div>
+                    </div>
+
+                    <div class="grid g-2">
+                        <div class="field">
+                            <label for="departamento">Departamento</label>
+                            <h:inputText id="departamento"
+                                         value="#{registroBean.departamento}"
+                                         required="true"
+                                         requiredMessage="El departamento es obligatorio."
+                                         maxlength="50"
+                                         placeholder="Departamento" />
+                        </div>
+
+                        <div class="field">
+                            <label for="provincia">Provincia</label>
+                            <h:inputText id="provincia"
+                                         value="#{registroBean.provincia}"
+                                         required="true"
+                                         requiredMessage="La provincia es obligatoria."
+                                         maxlength="50"
+                                         placeholder="Provincia" />
+                        </div>
+                    </div>
+
+                    <div class="grid g-2">
+                        <div class="field">
+                            <label for="pass">Contraseña</label>
+                            <h:inputSecret id="pass"
+                                           value="#{registroBean.contrasena}"
+                                           required="true"
+                                           requiredMessage="La contraseña es obligatoria."
+                                           maxlength="100"
+                                           placeholder="Ingresa una contraseña" />
+                        </div>
+
+                        <div class="field">
+                            <label for="pass2">Confirmar contraseña</label>
+                            <h:inputSecret id="pass2"
+                                           value="#{registroBean.confirmarContrasena}"
+                                           required="true"
+                                           requiredMessage="Confirma tu contraseña."
+                                           maxlength="100"
+                                           placeholder="Confirmar contraseña" />
+                        </div>
+                    </div>
+
+                    <div class="actions-row">
+                        <h:commandButton value="Registrar"
+                                         styleClass="btn btn-gold-lg"
+                                         action="#{registroBean.registrar()}" />
+                    </div>
+
+                    <p class="terms">
+                        Al registrarte aceptas los <a href="#">Términos y Condiciones</a> y la
+                        <a href="#">Política de Privacidad</a>.
+                    </p>
+                </h:form>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        © 2025 INKALOTO. Todos los derechos reservados.
+    </footer>
+
+</h:body>
+</html>

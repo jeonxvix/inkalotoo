@@ -1,0 +1,788 @@
+/* =========================================
+   VARIABLES Y RESET
+========================================= */
+:root {
+  --bg: #0b0b0d;
+  --card: #111115;
+  --ink: #ffb800;
+  --ink-strong: #ffa000;
+  --text: #000;
+  --muted: #6b6b76;
+  --stroke: #2a2a32;
+  --input-bg: #ffffff;
+}
+
+* { 
+  box-sizing: border-box; 
+  margin: 0;
+  padding: 0;
+}
+
+html, body { 
+  height: 100%; 
+}
+
+body {
+  font-family: "Poppins", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  line-height: 1.6;
+}
+
+/* =========================================
+   LAYOUT GENERAL
+========================================= */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* =========================================
+   TOPBAR / NAVEGACIÓN
+========================================= */
+.topbar {
+  border-bottom: 2px solid #1f1f26;
+  background: var(--card) !important;  /* #111115 en lugar de negro */
+}
+
+.topbar .container {
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand {
+  font-weight: 800;
+  letter-spacing: .5px;
+  color: var(--ink);
+  font-size: 28px;
+  text-decoration: none;
+}
+
+.nav-slim {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.nav-slim .brand {
+  margin-right: auto;
+}
+
+.nav-slim-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.balance-mini {
+  background: var(--card) !important;  /* Mismo que topbar */
+  color: #fff;
+  border: 1px solid var(--stroke);
+}
+
+.user-select select {
+  height: 38px;
+  min-width: 150px;
+  border-radius: 12px;
+  background: #ffffff !important;  /* Fondo blanco */
+  color: #000000 !important;       /* Texto negro */
+  border: 1px solid var(--stroke);
+  padding: 0 10px;
+}
+
+/* =========================================
+   COMPONENTES REUTILIZABLES
+========================================= */
+
+/* BOTONES */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 20px;
+  border-radius: 12px;
+  text-decoration: none;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.btn:active { 
+  transform: translateY(1px); 
+}
+
+.btn-dark {
+  background: #16161c;
+  color: #FFFFFF;
+  border: 1px solid var(--stroke);
+}
+
+.btn-gold {
+  background: var(--ink);
+  color: #1c1200;
+}
+
+.btn-gold:hover {
+  background: var(--ink-strong);
+}
+
+.btn-gold-lg {
+  width: 260px;
+  height: 48px;
+  background: linear-gradient(180deg, var(--ink), var(--ink-strong));
+  color: #1a1200;
+  font-weight: 800;
+  letter-spacing: .3px;
+  box-shadow: 0 6px 18px rgba(255,184,0,.22);
+}
+
+.actions-row { 
+  margin-top: 10px; 
+}
+
+/* FORMULARIOS */
+.form { 
+  margin-top: 6px; 
+}
+
+.grid {
+  display: grid;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.g-2 { 
+  grid-template-columns: 1fr 1fr; 
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+label {
+  font-size: 13px;
+  color: var(--text);
+  font-weight: 600;
+}
+
+input, select, textarea {
+  width: 100%;
+  height: 46px;
+  border-radius: 12px;
+  border: 1px solid var(--stroke);
+  padding: 0 14px;
+  font-size: 15px;
+  background: var(--input-bg);
+  color: #1c1c21;
+  font-family: inherit;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: #8fb7ff;
+  box-shadow: 0 0 0 3px rgba(74,131,255,.2);
+}
+
+input::placeholder, select::placeholder, textarea::placeholder {
+  color: #8a8a92;
+}
+
+/* =========================================
+   PÁGINAS ESPECÍFICAS
+========================================= */
+
+/* LOGIN & REGISTRO */
+.split {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  min-height: calc(100vh - 64px);
+}
+
+.hero {
+  position: relative;
+  border-right: 3px solid #2b2b33;
+  overflow: hidden;
+}
+
+.hero img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.panel {
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px 22px;
+  min-height: calc(100vh - 70px);
+}
+
+.panel-inner {
+  width: min(620px, 92vw);
+}
+
+.panel h1 {
+  margin: 0 0 18px;
+  font-size: 28px;
+  line-height: 1.2;
+  font-weight: 800;
+  color: #1c1c21;
+}
+
+.panel .accent { 
+  color: var(--ink); 
+}
+
+.hint {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 6px;
+  display: block;
+}
+
+.login-card {
+  background: #f8f9fa;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 100%;
+  max-width: 380px;
+  margin: 60px auto;
+}
+
+.login-title {
+  color: #1c1c21;
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 25px;
+}
+
+.terms {
+  margin-top: 14px;
+  color: #6b6b76;
+  font-size: 12.5px;
+}
+
+.terms a {
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.terms a:hover { 
+  text-decoration: underline; 
+}
+
+/* HOME PRINCIPAL */
+.banner {
+  background: #000;
+  border-bottom: 2px solid #1f1f26;
+}
+
+.banner img {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+  display: block;
+}
+
+.games {
+  background: #000;
+  padding: 40px 0;
+}
+
+.games-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.game {
+  flex: 1;
+  min-width: 300px;
+  text-align: center;
+  border: 3px solid #7a2cff;
+  border-radius: 8px;
+  padding: 14px;
+  background: var(--card);
+}
+
+.game h2 {
+  color: var(--ink);
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+
+.game img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-bottom: 14px;
+}
+
+/* MI CUENTA */
+.account-page {
+  background: #fff;
+  padding: 40px 0;
+  display: flex;
+  justify-content: center;
+  min-height: calc(100vh - 64px);
+}
+
+.account-grid {
+  width: min(1100px, 92vw);
+  display: grid;
+  grid-template-columns: 1.6fr 0.9fr;
+  gap: 32px;
+  align-items: flex-start;
+}
+
+.account-card {
+  background: #f8f9fa;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.1);
+  overflow: hidden;
+  border: 1px solid #e1e1e6;
+}
+
+.acc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  background: #e9ecef;
+  color: #1b1b1f;
+  font-weight: 800;
+  letter-spacing: .3px;
+}
+
+.acc-header h2 {
+  margin: 0;
+  font-size: 18px;
+  color: #1b1b1f;
+}
+
+.acc-balance { 
+  font-weight: 700; 
+  color: #1b1b1f;
+}
+
+.acc-items {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.acc-item {
+  background: #ffffff;
+  border: 1px solid #e1e1e6;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.acc-btn {
+  width: 100%;
+  background: #ffffff;
+  color: #1c1c21;
+  border: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  font-weight: 800;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.acc-btn .acc-ico {
+  background: #f1f3f4;
+  border-radius: 10px;
+  padding: 6px 8px;
+  margin-right: 10px;
+}
+
+.acc-btn .chev { 
+  opacity: .7; 
+  transition: transform 0.2s ease;
+}
+
+.acc-content {
+  display: none;
+  padding: 12px 14px;
+  background: #f8f9fa;
+  border-top: 1px solid #e1e1e6;
+  color: #1c1c21;
+}
+
+.acc-item.open .acc-content { 
+  display: block; 
+}
+
+.acc-item.open .chev { 
+  transform: rotate(180deg); 
+}
+
+/* CARGAR SALDO */
+.promo-column {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: sticky;
+  top: 20px;
+}
+
+.promo-column img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.1);
+}
+
+/* =========================================
+   COMPONENTES PENDIENTES (BINGO, NOTIFICACIONES)
+========================================= */
+
+/* BINGO - ESTRUCTURA BÁSICA */
+.bingo-wrap {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 18px;
+  margin-top: 18px;
+}
+
+.bingo-card {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-auto-rows: 70px;
+  gap: 6px;
+  background: var(--card);
+  border: 2px solid var(--stroke);
+  padding: 10px;
+  border-radius: 14px;
+}
+
+.bingo-cell {
+  background: #ffffff;
+  color: #1c1c21;
+  border: 1px solid #e8e8ee;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.bingo-cell.marked {
+  background: linear-gradient(180deg, var(--ink), var(--ink-strong));
+  color: #1a1200;
+  border-color: #ffb800;
+}
+
+/* NOTIFICACIONES - ESTRUCTURA BÁSICA */
+.notif-icon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  text-decoration: none;
+  color: var(--text);
+  background: #16161c;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--stroke);
+  transition: background 0.2s;
+}
+
+.notif-badge {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  background: var(--ink);
+  color: #111;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 12px;
+  padding: 0 6px;
+  line-height: 1.4;
+}
+
+.tickets-list {
+  display: grid;
+  gap: 10px;
+}
+
+.ticket {
+  border: 1px solid #e1e1e6;
+  background: #ffffff;
+  color: #1b1b1f;
+  padding: 14px;
+  border-radius: 14px;
+}
+/* Estilo para los botones */
+.button-link {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 4px;
+    background-color: #f8f9fa;
+    border: 1px solid #007bff;
+    transition: all 0.3s ease;
+}
+
+.button-link:hover {
+    background-color: #007bff;
+    color: white;
+    border-color: #0056b3;
+}
+
+.button-link:focus {
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.5);
+}
+
+/* =========================================
+   UTILIDADES Y MENSAJES
+========================================= */
+.msg-error {
+  color: #b00020;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.msg-ok {
+  color: #0a8f08;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.text-muted {
+  color: var(--muted);
+}
+
+.text-center {
+  text-align: center;
+}
+/* =========================================
+   tabla historial jugadas
+========================================= */
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 16px;
+    background: var(--panel);
+    color: var(--ink);
+}
+
+.table th, .table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+}
+
+.table th {
+    background: var(--card);
+    text-align: left;
+    font-weight: 600;
+}
+
+.table tr:hover {
+    background: rgba(255,255,255,0.05);
+}
+
+/* ===== IMAGENES MICUENTA ===== */
+
+/* Tarjetas promocionales */
+.promo-card {
+    position: relative;
+    display: block;
+    margin-bottom: 22px;
+    overflow: hidden;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.promo-card img {
+    width: 100%;
+    display: block;
+    transition: transform .35s ease;
+}
+
+/* Efecto zoom */
+.promo-card:hover img {
+    transform: scale(1.1);
+}
+
+/* Glow para la tarjeta */
+.promo-card:hover {
+    box-shadow: 0 0 20px rgba(255, 204, 0, 0.45);
+}
+
+/* Overlay degradado */
+.promo-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.75), rgba(0,0,0,0.1));
+}
+
+/* Título del juego */
+.promo-title {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 16px 10px;
+    text-align: center;
+    font-size: 1.45rem;
+    font-weight: 700;
+
+    /* Dorado elegante */
+    color: #ffdb4d;
+    text-shadow: 
+        0 0 5px rgba(0,0,0,.7),
+        0 0 10px rgba(0,0,0,.9),
+        0 0 12px rgba(255,215,0,.9);
+
+    z-index: 2;
+    letter-spacing: 0.5px;
+}
+
+
+/* ===== BOTÓN CERRAR SESIÓN ===== */
+.btn-logout {
+    background: #ff3b3b;        /* rojo suave estilo warning */
+    color: #fff;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 25px;        /* estilo pill */
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: 0.25s;
+    font-weight: bold;
+}
+
+.btn-logout:hover {
+    background: #d32f2f;
+    transform: translateY(-1px);
+}
+
+.btn-logout:active {
+    background: #b71c1c;
+    transform: scale(0.95);
+}
+
+
+/* =========================================
+   FOOTER
+========================================= */
+.footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+  padding: 18px 12px;
+  border-top: 2px solid #1f1f26;
+  background: #0a0a0f;
+  margin-top: auto;
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+@media (max-width: 980px) {
+  .split { 
+    grid-template-columns: 1fr; 
+  }
+  
+  .hero { 
+    display: none; 
+  }
+  
+  .panel { 
+    padding: 28px 16px; 
+  }
+
+  .g-2 { 
+    grid-template-columns: 1fr; 
+  }
+  
+  .btn-gold-lg { 
+    width: 100%; 
+  }
+
+  .banner img { 
+    height: 200px; 
+  }
+
+  .games-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .bingo-wrap {
+    grid-template-columns: 1fr;
+  }
+  
+  .bingo-card {
+    grid-auto-rows: 60px;
+  }
+
+  .account-grid {
+    grid-template-columns: 1fr;
+    width: 90%;
+  }
+  
+  .account-page {
+    padding: 16px 0;
+  }
+
+  .promo-column {
+    flex-direction: row;
+    overflow-x: auto;
+  }
+  
+  .promo-column img {
+    min-width: 220px;
+    height: 130px;
+  }
+}
+
+@media (max-width: 768px) {
+  .nav-slim {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .nav-slim-right {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .container {
+    padding: 0 15px;
+  }
+}

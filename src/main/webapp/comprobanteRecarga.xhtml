@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit this template
+-->
+<!DOCTYPE html>
+<html lang="es"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+    <title>Comprobante de recarga - Inkaloto</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link href="css/style.css" rel="stylesheet" type="text/css"/>
+</h:head>
+
+<h:body>
+
+<f:metadata>
+    <!-- Tomamos el par�metro ?id=123 -->
+    <f:viewParam name="id" value="#{comprobanteRecargaBean.idMovimiento}"/>
+    <f:event type="preRenderView" listener="#{comprobanteRecargaBean.cargar()}"/>
+</f:metadata>
+
+<header class="topbar">
+    <div class="container nav-slim">
+        <a href="index.xhtml" class="brand">INKALOTO</a>
+        <div class="nav-slim-right">
+            <a href="micuenta.xhtml" class="btn btn-dark pill">Volver a mi cuenta</a>
+        </div>
+    </div>
+</header>
+
+<main class="panel">
+    <div class="panel-inner">
+
+        <h1>Comprobante de <span class="accent">recarga</span></h1>
+        <p class="hint">Este comprobante corresponde a la recarga realizada en tu billetera Inkaloto.</p>
+
+        <h:panelGroup rendered="#{comprobanteRecargaBean.movimiento != null}">
+            <div class="tickets-list">
+                <div class="ticket">
+                    <h3 style="margin-top:0; margin-bottom:8px;">INKALOTO - Recarga de saldo</h3>
+
+                    <p><strong>C�digo de movimiento:</strong>
+                        #{comprobanteRecargaBean.movimiento.codigoMovimiento}</p>
+
+                    <p><strong>Fecha y hora:</strong>
+                        #{comprobanteRecargaBean.movimiento.fechaMovimiento}</p>
+
+                    <p><strong>Monto recargado:</strong>
+                        S/ #{comprobanteRecargaBean.movimiento.monto}</p>
+
+                    <p><strong>M�todo de pago:</strong>
+                        #{comprobanteRecargaBean.movimiento.metodoPago}</p>
+
+                    <p><strong>Tipo de movimiento:</strong>
+                        #{comprobanteRecargaBean.movimiento.tipoMovimiento}</p>
+
+                    <p><strong>Descripci�n:</strong>
+                        #{comprobanteRecargaBean.movimiento.descripcion}</p>
+
+                    <hr/>
+
+                    <p class="hint">
+                        Guarda este comprobante o impr�melo como respaldo de tu recarga.
+                    </p>
+                </div>
+            </div>
+
+            <div class="actions-row">
+                <a href="micuenta.xhtml" class="btn btn-dark">Ir a mi cuenta</a>
+                <button type="button" class="btn-gold" onclick="window.print()">Imprimir / Guardar PDF</button>
+            </div>
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{comprobanteRecargaBean.movimiento == null}">
+            <p class="msg-error">
+                No se encontr� el comprobante de la recarga. Verifica el enlace o realiza una nueva recarga.
+            </p>
+        </h:panelGroup>
+
+    </div>
+</main>
+
+<footer class="footer">
+    � 2025 INKALOTO � Comprobante de recarga.
+</footer>
+
+</h:body>
+</html>

@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="es"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+    <title>INKALOTO - Historial de premios</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link href="css/style.css" rel="stylesheet" type="text/css"/>
+</h:head>
+
+<h:body>
+
+<!-- =============== TOPBAR =============== -->
+<header class="topbar">
+    <div class="container nav-slim">
+        <!-- Logo / inicio -->
+        <a href="#{request.contextPath}/index.xhtml" class="brand">INKALOTO</a>
+
+        <div class="nav-slim-right">
+            <!-- 🔔 ahora puedes usar el total de no leídas en ESTA página -->
+            <a href="#{request.contextPath}/notificaciones.xhtml"
+                class="notif-icon"
+                title="Notificaciones">
+                 🔔
+                 <span id="notifCount" class="notif-badge">
+                     #{notificacionesBean.cantidadNoLeidas}
+                 </span>
+             </a>
+
+            <!-- Cargar saldo -->
+            <a href="#{request.contextPath}/cargarsaldo.xhtml" class="btn btn-dark pill">+ Cargar saldo</a>
+
+            <!-- Saldo -->
+            <span class="balance-mini">
+                S/
+                <strong>
+                    <h:outputText value="#{miCuentaBean.billetera.saldoActual}">
+                        <f:convertNumber minFractionDigits="2" maxFractionDigits="2"/>
+                    </h:outputText>
+                </strong>
+            </span>
+
+            <!-- Menú de usuario -->
+            <div class="select user-select">
+                <select id="userMenu" onchange="cambiarPagina(this)">
+                    <option value="">
+                        #{loginBean.usuarioLogueado != null ? loginBean.usuarioLogueado.nombres : 'Usuario'}
+                    </option>
+                    <option value="#{request.contextPath}/micuenta.xhtml">Mi cuenta</option>
+                    <option value="#{request.contextPath}/historialtransacciones.xhtml">Movimientos</option>
+                    <option value="#{request.contextPath}/historialjugada.xhtml">Historial de jugadas</option>
+                    <option value="#{request.contextPath}/historialpremios.xhtml">Premios</option>
+                    <option value="#{request.contextPath}/notificaciones.xhtml">Notificaciones</option>
+                    <option value="#{request.contextPath}/retiro.xhtml">Retirar premios</option>
+                </select>
+            </div>
+                                    <!-- Cerrar sesión -->
+                                    <h:form style="display:inline;">
+                    <h:commandButton value="Cerrar sesión"
+                                     action="#{loginBean.logout}"
+                                     styleClass="btn-logout" />
+                </h:form>
+        </div>
+    </div>
+</header>
+
+<!-- =============== CONTENIDO =============== -->
+<main class="panel">
+    <div class="panel-inner">
+
+        <h1>Historial de <span class="accent">premios</span></h1>
+        <p class="hint">
+            Aquí se muestran los premios acreditados en tu billetera INKALOTO
+            (bingo, sorteo o tragamonedas).
+        </p>
+
+        <!-- Cajita con saldo actual -->
+        <div class="info-box">
+            <p>Total disponible:
+                <strong>
+                    S/
+                    <h:outputText value="#{miCuentaBean.billetera.saldoActual}">
+                        <f:convertNumber minFractionDigits="2" maxFractionDigits="2"/>
+                    </h:outputText>
+                </strong>
+            </p>
+        </div>
+
+        <h:form>
+
+            <!-- Si no hay premios -->
+            <h:panelGroup rendered="#{empty historialPremiosBean.premios}">
+                <div style="text-align:center; padding:40px; color:#777;">
+                    <h3>Aún no tienes premios registrados</h3>
+                    <p>Cuando ganes en alguno de los juegos, tus premios aparecerán aquí.</p>
+                </div>
+            </h:panelGroup>
+
+            <!-- Tabla de premios -->
+            <h:dataTable value="#{historialPremiosBean.premios}"
+                         var="m"
+                         rendered="#{not empty historialPremiosBean.premios}"
+                         styleClass="table movimientos-table">
+
+                <h:column>
+                    <f:facet name="header">Fecha</f:facet>
+                    <h:outputText value="#{m.fechaMovimiento}">
+                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm"
+                                           type="localDateTime"/>
+                    </h:outputText>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">Código</f:facet>
+                    <h:outputText value="#{m.codigoMovimiento}"/>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">Monto ganado</f:facet>
+                    <span style="color:#4caf50;">
+                        + S/
+                        <h:outputText value="#{m.monto}">
+                            <f:convertNumber minFractionDigits="2" maxFractionDigits="2"/>
+                        </h:outputText>
+                    </span>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">Detalle</f:facet>
+                    <h:outputText value="#{m.descripcion}"/>
+                </h:column>
+
+            </h:dataTable>
+
+        </h:form>
+
+    </div>
+</main>
+
+<footer class="footer">
+    © 2025 INKALOTO — Historial de premios.
+</footer>
+
+<style>
+    .info-box {
+        max-width: 420px;
+        margin: 0 auto 20px auto;
+        padding: 12px 18px;
+        border-radius: 12px;
+        background: #1f1f24;
+        color: #f5f5f5;
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+    .movimientos-table th,
+    .movimientos-table td {
+        vertical-align: middle;
+    }
+</style>
+<script src="jsp/comprobante.js" type="text/javascript"></script>
+</h:body>
+</html>

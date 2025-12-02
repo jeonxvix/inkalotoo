@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <h:head>
+        <title>INKALOTO</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <link href="css/style.css" rel="stylesheet" type="text/css"/>
+    </h:head>
+
+    <h:body>
+
+        <!-- Barra superior -->
+        <header class="topbar">
+            <div class="container nav-slim">
+
+                <a href="index.xhtml" class="brand">INKALOTO</a>
+
+                <div class="nav-slim-right">
+
+            <!-- 🔔 ahora puedes usar el total de no leídas en ESTA página -->
+            <a href="#{request.contextPath}/notificaciones.xhtml"
+                class="notif-icon"
+                title="Notificaciones">
+                 🔔
+                 <span id="notifCount" class="notif-badge">
+                     #{notificacionesBean.cantidadNoLeidas}
+                 </span>
+             </a>
+
+                    <a href="cargarsaldo.xhtml" class="btn btn-dark pill">+ Cargar saldo</a>
+
+                    <span class="balance-mini">
+                        S/ <strong>#{miCuentaBean.billetera.saldoActual}</strong>
+                    </span>
+
+                    <div class="select user-select">
+                        <select id="userMenu"
+                                onchange="if(this.value){ window.location = this.value; }">
+                            <option selected="selected">#{loginBean.usuarioLogueado.nombres}</option>
+                    <option value="#{request.contextPath}/micuenta.xhtml">Mi cuenta</option>
+                    <option value="#{request.contextPath}/historialtransacciones.xhtml">Movimientos</option>
+                    <option value="#{request.contextPath}/historialjugada.xhtml">Historial de jugadas</option>
+                    <option value="#{request.contextPath}/historialpremios.xhtml">Premios</option>
+                    <option value="#{request.contextPath}/notificaciones.xhtml">Notificaciones</option>
+                    <option value="#{request.contextPath}/retiro.xhtml">Retirar premios</option>
+                        </select>
+                    </div>
+                                    <!-- Cerrar sesión -->
+                                    <h:form style="display:inline;">
+                    <h:commandButton value="Cerrar sesión"
+                                     action="#{loginBean.logout}"
+                                     styleClass="btn-logout" />
+                </h:form>
+                </div>
+            </div>
+        </header>
+
+        <!-- Contenido -->
+        <main class="account-page">
+            <div class="container account-grid">
+
+                <!-- Columna izquierda: Card Mi Cuenta -->
+                <section class="account-card">
+
+                    <header class="acc-header">
+                        <h2>MI CUENTA</h2>
+                        <span class="acc-balance">
+                            Saldo: S/<strong>#{miCuentaBean.billetera.saldoActual}</strong>
+                        </span>
+                    </header>
+
+                    <!-- Acordeón -->
+                    <div class="acc-items">
+
+                        <!-- Mi perfil -->
+                        <article class="acc-item open">
+                            <button class="acc-btn" type="button">
+                                <span class="acc-ico">👤</span>
+                                <span>Mi perfil</span>
+                                <span class="chev">▾</span>
+                            </button>
+
+                            <div class="acc-content">
+                                <!-- AHORA ES FORM JSF -->
+                                <h:form styleClass="form" id="formPerfil">
+                                    <div class="grid g-2">
+                                        <div class="field">
+                                            <label for="nombres">Nombres</label>
+                                            <h:inputText id="nombres"
+                                                         value="#{loginBean.usuarioLogueado.nombres}"
+                                                         maxlength="100"
+                                                         required="true"
+                                                         requiredMessage="Los nombres son obligatorios."/>
+                                        </div>
+
+                                        <div class="field">
+                                            <label for="apellidos">Apellidos</label>
+                                            <h:inputText id="apellidos"
+                                                         value="#{loginBean.usuarioLogueado.apellidos}"
+                                                         maxlength="100"
+                                                         required="true"
+                                                         requiredMessage="Los apellidos son obligatorios."/>
+                                        </div>
+
+                                        <div class="field">
+                                            <label for="correo">Correo</label>
+                                            <h:inputText id="correo"
+                                                         value="#{loginBean.usuarioLogueado.correo}"
+                                                         maxlength="120"
+                                                         required="true"
+                                                         requiredMessage="El correo es obligatorio."/>
+                                        </div>
+
+                                        <div class="field">
+                                            <label for="celular">Celular</label>
+                                            <h:inputText id="celular"
+                                                         value="#{loginBean.usuarioLogueado.celular}"
+                                                         maxlength="15"
+                                                         required="true"
+                                                         requiredMessage="El celular es obligatorio."/>
+                                        </div>
+
+                                        <div class="field">
+                                            <label for="departamento">Departamento</label>
+                                            <h:inputText id="departamento"
+                                                         value="#{loginBean.usuarioLogueado.departamento}"
+                                                         maxlength="50"
+                                                         required="true"
+                                                         requiredMessage="El departamento es obligatorio."/>
+                                        </div>
+
+                                        <div class="field">
+                                            <label for="provincia">Provincia</label>
+                                            <h:inputText id="provincia"
+                                                         value="#{loginBean.usuarioLogueado.provincia}"
+                                                         maxlength="50"
+                                                         required="true"
+                                                         requiredMessage="La provincia es obligatoria."/>
+                                        </div>
+
+                                        <div class="field">
+                                            <label>Documento</label>
+                                            <input type="text"
+                                                   value="#{loginBean.usuarioLogueado.tipo_documento} #{loginBean.usuarioLogueado.numero_documento}"
+                                                   readonly="readonly"/>
+                                        </div>
+                                    </div>
+
+                                    <!-- Mensajes -->
+                                    <div class="field">
+                                        <h:messages id="msgs" styleClass="msg-error" layout="list"/>
+
+                                        <h:panelGroup id="panelMsg">
+                                            <h:panelGroup rendered="#{not empty miCuentaBean.mensajeError}">
+                                                <p class="withdraw-status" style="color:red;">
+                                                    #{miCuentaBean.mensajeError}
+                                                </p>
+                                            </h:panelGroup>
+
+                                            <h:panelGroup rendered="#{not empty miCuentaBean.mensajeExito}">
+                                                <p class="withdraw-status" style="color:green;">
+                                                    #{miCuentaBean.mensajeExito}
+                                                </p>
+                                            </h:panelGroup>
+                                        </h:panelGroup>
+                                    </div>
+
+                                    <div class="actions-row">
+                                        <h:commandButton value="Actualizar datos"
+                                                         styleClass="btn btn-dark"
+                                                         action="#{miCuentaBean.actualizarPerfil()}">
+                                            <!-- AJAX: ejecuta el form y solo refresca mensajes -->
+                                            <f:ajax execute="@form" render="msgs panelMsg"/>
+                                        </h:commandButton>
+                                    </div>
+                                </h:form>
+                            </div>
+                        </article>
+
+                    </div>
+
+                </section>
+
+        <aside class="promo-column">
+
+            <!-- TRAGAMONEDAS -->
+            <a href="#{request.contextPath}/tragamonedas.xhtml" class="promo-card">
+                <div class="promo-title">🎰 Tragamonedas</div>
+                <img src="imagenes/CASINO-ONLINE-MERIDIANBET.jpg" alt="Promo Tragamonedas"/>
+            </a>
+
+            <!-- BINGO -->
+            <a href="#{request.contextPath}/bingo.xhtml" class="promo-card">
+                <div class="promo-title">🔵 Bingo Online</div>
+                <img src="imagenes/tipos-jogos-bingo.jpg" alt="Promo Bingo"/>
+            </a>
+
+            <!-- SORTEO -->
+            <a href="#{request.contextPath}/sorteo.xhtml" class="promo-card">
+                <div class="promo-title">💰 Sorteo Millonario</div>
+                <img src="imagenes/20240828162215_ff.jpg" alt="Promo Sorteo"/>
+            </a>
+
+        </aside>
+
+
+
+
+            </div>
+        </main>
+
+        <footer class="footer">
+            © 2025 INKALOTO — Mi cuenta.
+        </footer>
+
+    </h:body>
+</html>

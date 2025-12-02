@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="es"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+    <title>INKALOTO - Retiro de premios</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link href="css/style.css" rel="stylesheet" type="text/css"/>
+</h:head>
+
+<h:body>
+
+<!-- =============== TOPBAR =============== -->
+<header class="topbar">
+    <div class="container nav-slim">
+
+        <a href="#{request.contextPath}/index.xhtml" class="brand">INKALOTO</a>
+
+        <div class="nav-slim-right">
+
+            <!-- 🔔 ahora puedes usar el total de no leídas en ESTA página -->
+            <a href="#{request.contextPath}/notificaciones.xhtml"
+                class="notif-icon"
+                title="Notificaciones">
+                 🔔
+                 <span id="notifCount" class="notif-badge">
+                     #{notificacionesBean.cantidadNoLeidas}
+                 </span>
+             </a>
+
+            <a href="#{request.contextPath}/cargarsaldo.xhtml" class="btn btn-dark pill">+ Cargar saldo</a>
+
+            <span class="balance-mini">
+                S/
+                <strong>
+                    <h:outputText value="#{miCuentaBean.billetera.saldoActual}">
+                        <f:convertNumber minFractionDigits="2" maxFractionDigits="2"/>
+                    </h:outputText>
+                </strong>
+            </span>
+
+            <div class="select user-select">
+                <select id="userMenu" onchange="cambiarPagina(this)">
+                    <option value="">
+                        #{loginBean.usuarioLogueado != null ? loginBean.usuarioLogueado.nombres : 'Usuario'}
+                    </option>
+                    <option value="#{request.contextPath}/micuenta.xhtml">Mi cuenta</option>
+                    <option value="#{request.contextPath}/historialtransacciones.xhtml">Movimientos</option>
+                    <option value="#{request.contextPath}/historialjugada.xhtml">Historial de jugadas</option>
+                    <option value="#{request.contextPath}/historialpremios.xhtml">Premios</option>
+                    <option value="#{request.contextPath}/notificaciones.xhtml">Notificaciones</option>
+                    <option value="#{request.contextPath}/retiro.xhtml">Retirar premios</option>
+                </select>
+            </div>
+                                    <!-- Cerrar sesión -->
+                                    <h:form style="display:inline;">
+                    <h:commandButton value="Cerrar sesión"
+                                     action="#{loginBean.logout}"
+                                     styleClass="btn-logout" />
+                </h:form>
+        </div>
+    </div>
+</header>
+
+
+<!-- =============== CONTENIDO =============== -->
+<main class="panel">
+    <div class="panel-inner">
+
+        <h1>Retiro de <span class="accent">premios</span></h1>
+        <p class="hint">
+            Aquí puedes solicitar el retiro de tu saldo disponible en INKALOTO.
+        </p>
+
+        <!-- Saldo actual -->
+        <div class="info-box">
+            <p>Saldo disponible:
+                <strong>
+                    S/
+                    <h:outputText value="#{miCuentaBean.billetera.saldoActual}">
+                        <f:convertNumber minFractionDigits="2" maxFractionDigits="2"/>
+                    </h:outputText>
+                </strong>
+            </p>
+        </div>
+
+        <!-- Mensajes -->
+        <h:panelGroup rendered="#{not empty retiroBean.mensajeError}">
+            <div class="alert alert-error">
+                #{retiroBean.mensajeError}
+            </div>
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{not empty retiroBean.mensajeExito}">
+            <div class="alert alert-success">
+                #{retiroBean.mensajeExito}
+            </div>
+        </h:panelGroup>
+
+        <!-- Formulario de retiro -->
+        <h:form id="formRetiro" styleClass="form">
+
+            <div class="field">
+                <label for="monto">Monto a retirar</label>
+                <h:inputText id="monto"
+                             value="#{retiroBean.monto}"
+                             required="true"
+                             requiredMessage="Ingresa un monto"
+                             styleClass="form-control">
+                    <f:convertNumber />
+                </h:inputText>
+            </div>
+
+            <div class="field">
+                <label for="metodo">Método de retiro</label>
+                <div class="select">
+                    <h:selectOneMenu id="metodo"
+                                     value="#{retiroBean.metodo}"
+                                     styleClass="form-control">
+                        <f:selectItem itemValue="" itemLabel="Selecciona un método"/>
+                        <f:selectItem itemValue="CUENTA_BANCARIA" itemLabel="Cuenta bancaria"/>
+                        <f:selectItem itemValue="BILLETERA_DIGITAL" itemLabel="Billetera digital (Yape/Plin)"/>
+                    </h:selectOneMenu>
+                </div>
+            </div>
+
+            <div class="field">
+                <label for="destino">Destino (número de cuenta o billetera)</label>
+                <h:inputText id="destino"
+                             value="#{retiroBean.destino}"
+                             required="true"
+                             requiredMessage="Ingresa el destino del retiro"
+                             styleClass="form-control"/>
+            </div>
+
+            <div class="actions-row">
+                <h:commandButton value="Solicitar retiro"
+                                 action="#{retiroBean.solicitarRetiro}"
+                                 styleClass="btn-gold-lg"/>
+            </div>
+
+        </h:form>
+
+        <!-- =============== COMPROBANTE + BOTÓN PDF (solo si hay comprobante) =============== -->
+        <h:panelGroup rendered="#{not empty retiroBean.comprobanteCodigo}">
+            <div id="comprobante-retiro" class="info-box" style="margin-top:25px; text-align:center;">
+
+                <h2 class="accent">Comprobante de retiro</h2>
+                <p><strong>Código:</strong> #{retiroBean.comprobanteCodigo}</p>
+                <p><strong>Fecha:</strong> #{retiroBean.comprobanteFecha}</p>
+                <p><strong>Monto retirado:</strong> S/ #{retiroBean.comprobanteMonto}</p>
+
+                <p style="margin-top:10px; color:#aaa; font-size:0.85rem;">
+                    Guarda este comprobante para tu registro.
+                </p>
+            </div>
+
+            <div class="actions-row" style="justify-content:center; margin-top:10px;">
+                <button type="button" class="btn btn-dark" onclick="imprimirComprobante()">
+                    Descargar comprobante en PDF
+                </button>
+            </div>
+        </h:panelGroup>
+
+    </div>
+</main>
+
+<footer class="footer">
+    © 2025 INKALOTO — Retiro de premios.
+</footer>
+
+<style>
+    .info-box {
+        max-width: 420px;
+        margin: 0 auto 20px auto;
+        padding: 12px 18px;
+        border-radius: 12px;
+        background: #1f1f24;
+        color: #f5f5f5;
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+</style>
+
+<script src="jsp/comprobante.js" type="text/javascript"></script>
+</h:body>
+</html>

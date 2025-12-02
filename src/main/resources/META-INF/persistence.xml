@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
+             version="3.0">
+
+    <persistence-unit name="inkalotoPU" transaction-type="RESOURCE_LOCAL">
+
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+
+        <!-- Entidades -->
+        <class>com.inkaloto.modelo.Usuario</class>
+        <class>com.inkaloto.modelo.BilleteraUsuario</class>
+        <class>com.inkaloto.modelo.MovimientoBilletera</class>
+        <class>com.inkaloto.modelo.Jugada</class>
+        <class>com.inkaloto.modelo.Sorteo</class>
+        <class>com.inkaloto.modelo.Notificacion</class>
+
+        <properties>
+            <!-- Conexión a MySQL del SERVIDOR -->
+            <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+            <property name="jakarta.persistence.jdbc.url"
+                      value="jdbc:mysql://localhost:3306/prueba1?useSSL=false&amp;serverTimezone=UTC"/>
+            <property name="jakarta.persistence.jdbc.user" value="rootbackend"/>
+            <property name="jakarta.persistence.jdbc.password" value="angeles08"/>
+
+            <!-- Logs -->
+            <property name="eclipselink.logging.level" value="FINE"/>
+            <property name="eclipselink.logging.parameters" value="true"/>
+
+            <!-- No generar tablas automáticamente -->
+            <property name="jakarta.persistence.schema-generation.database.action"
+                      value="none"/>
+        </properties>
+    </persistence-unit>
+
+</persistence>

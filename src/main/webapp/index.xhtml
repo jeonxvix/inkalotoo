@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+    <title>INKALOTO - Inicio</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="css/style.css" rel="stylesheet" type="text/css" />
+</h:head>
+
+<h:body>
+
+  <!-- Barra superior -->
+  <header class="topbar">
+    <div class="container nav-slim">
+      <a href="index.xhtml" class="brand">INKALOTO</a>
+
+      <div class="nav-slim-right">
+
+        <!-- NAV para invitados (sin login) -->
+        <h:panelGroup rendered="#{loginBean.usuarioLogueado == null}">
+            <a href="login.xhtml" class="btn btn-dark">Iniciar sesión</a>
+            <a href="registro.xhtml" class="btn btn-gold pill">Regístrate</a>
+        </h:panelGroup>
+
+        <!-- NAV para usuarios logueados -->
+        <h:panelGroup rendered="#{loginBean.usuarioLogueado != null}">
+            <!-- 🔔 ahora puedes usar el total de no leídas en ESTA página -->
+            <a href="#{request.contextPath}/notificaciones.xhtml"
+                class="notif-icon"
+                title="Notificaciones">
+                 🔔
+                 <span id="notifCount" class="notif-badge">
+                     #{notificacionesBean.cantidadNoLeidas}
+                 </span>
+             </a>
+
+            <!-- Cargar saldo -->
+            <a href="cargarsaldo.xhtml" class="btn btn-dark pill">+ Cargar saldo</a>
+
+            <!-- Saldo desde la billetera -->
+            <span class="balance-mini">
+                S/
+                <strong>
+                    <h:outputText value="#{miCuentaBean.billetera.saldoActual}">
+                        <f:convertNumber minFractionDigits="2" maxFractionDigits="2"/>
+                    </h:outputText>
+                </strong>
+            </span>
+
+            <!-- Menú usuario -->
+            <div class="select user-select">
+                <select id="userMenu"
+                        onchange="if(this.value){ window.location = this.value; }">
+                    <option selected="selected">
+                        #{loginBean.usuarioLogueado.nombres}
+                    </option>
+                    <option value="#{request.contextPath}/micuenta.xhtml">Mi cuenta</option>
+                    <option value="#{request.contextPath}/historialtransacciones.xhtml">Movimientos</option>
+                    <option value="#{request.contextPath}/historialjugada.xhtml">Historial de jugadas</option>
+                    <option value="#{request.contextPath}/historialpremios.xhtml">Premios</option>
+                    <option value="#{request.contextPath}/notificaciones.xhtml">Notificaciones</option>
+                    <option value="#{request.contextPath}/retiro.xhtml">Retirar premios</option>
+                </select>
+            </div>
+                                    <!-- Cerrar sesión -->
+                                    <h:form style="display:inline;">
+                    <h:commandButton value="Cerrar sesión"
+                                     action="#{loginBean.logout}"
+                                     styleClass="btn-logout" />
+                </h:form>
+        </h:panelGroup>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- Banner principal -->
+  <section class="banner">
+    <img src="imagenes/banner-tga-vibra.png" alt="Promociones INKALOTO" />
+  </section>
+
+  <!-- Juegos principales -->
+  <section class="games">
+    <div class="games-container">
+      
+      <!-- Bingo -->
+      <article class="game">
+        <h2>BINGO EN LÍNEA</h2>
+        <img src="imagenes/tipos-jogos-bingo.jpg" alt="Bingo en línea" />
+        <a href="bingo.xhtml" class="btn btn-gold">Jugar Bingo</a>
+      </article>
+
+      <!-- Sorteo -->
+      <article class="game">
+        <h2>SORTEO ONLINE</h2>
+        <img src="imagenes/20240828162215_ff.jpg" alt="Sorteo online" />
+        <a href="sorteo.xhtml" class="btn btn-gold">Comprar boleto</a>
+      </article>
+
+      <!-- Tragamonedas -->
+      <article class="game">
+        <h2>TRAGAMONEDAS</h2>
+        <img src="imagenes/CASINO-ONLINE-MERIDIANBET.jpg" alt="Tragamonedas" />
+        <a href="tragamonedas.xhtml" class="btn btn-gold">Jugar ahora</a>
+      </article>
+
+    </div>
+  </section>
+
+  <footer class="footer">
+    © 2025 INKALOTO — Plataforma de juegos en línea.
+  </footer>
+
+</h:body>
+</html>
